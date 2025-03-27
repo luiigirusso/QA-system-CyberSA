@@ -1,0 +1,32 @@
+services:
+  knowledge_base:
+    build:
+      context: ./0.knowledge_base
+    volumes:
+      - ./files/knowledge_base:/opt/knowledge_base
+    image: ${PROJECT_PREFIX}-knowledge_base
+    environment:
+      - KB_TURTLE_FILE_PATH=${KB_TURTLE_FILE_PATH}
+      - KB_PICKLE_FILE_PATH=${KB_PICKLE_FILE_PATH}
+
+  training:
+    build:
+      context: ./1.training
+    volumes:
+      - ./files/training:/opt/training
+      - ./files/knowledge_base:/opt/knowledge_base
+    ports:
+      - "6006:6006"
+    image: ${PROJECT_PREFIX}-training
+    environment:
+      - EMBEDDING_DIM=${EMBEDDING_DIM}
+      - NUM_EPOCHS=${NUM_EPOCHS}
+      - LEARNING_RATE=${LEARNING_RATE}
+      - NUM_NEGS_PER_POS=${NUM_NEGS_PER_POS}
+      - MODEL=${MODEL}
+      - OPTIMIZER=${OPTIMIZER}
+      - BATCH_SIZE=${BATCH_SIZE}
+      - KB_PICKLE_FILE_PATH=${KB_PICKLE_FILE_PATH}
+      - MODEL_PATH=${MODEL_PATH}
+      - TENSORBOARD_PATH=${TENSORBOARD_PATH}
+      - CHECKPOINT_NAME=${CHECKPOINT_NAME}
