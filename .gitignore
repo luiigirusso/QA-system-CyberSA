@@ -1,2 +1,4 @@
 rag/.env
-
+rag/files/knowledge_base/lan_v1.5.pkl
+rag/files/training/checkpoint.pt
+rag/files/training/TransE.pkl

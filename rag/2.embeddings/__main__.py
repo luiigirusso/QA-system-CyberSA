@@ -16,8 +16,7 @@ def extract_name(url):
         "http://d3fend.mitre.org/ontologies/d3fend.owl#",
         "http://example.org/network#",
         "http://www.w3.org/2002/07/owl#",
-        "http://www.w3.org/2004/02/skos/core#",
-        "http://example.org/entities/"
+        "http://www.w3.org/2004/02/skos/core#"
     ]
     for prefix in prefixes:
         if url.startswith(prefix):
