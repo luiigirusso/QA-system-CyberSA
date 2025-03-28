@@ -7,9 +7,9 @@ RUN apt-get update && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 LABEL maintainer="Luigi, Russo (luiigirusso)"
-LABEL description="Docker Image for extracting embeddings from KGE model"
-LABEL org.opencontainers.image.name=embeddings
-LABEL org.opencontainers.image.title=embeddings
+LABEL description="Docker Image for RAG"
+LABEL org.opencontainers.image.name=rag
+LABEL org.opencontainers.image.title=rag
 LABEL org.opencontainers.image.created=$BUILD_DATE
 
 COPY requirements.txt .
@@ -18,4 +18,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY __main__.py /opt/
 WORKDIR /opt/
 
-CMD ["python", "__main__.py"]
+CMD ["streamlit", "run", "/opt/__main__.py", "--server.port=8501", "--server.address=0.0.0.0"]

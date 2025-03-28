@@ -1,0 +1,14 @@
+services:
+  rag:
+    build:
+      context: ./3.rag
+    volumes:
+      - ./files/knowledge_base:/opt/knowledge_base
+      - ./files/embeddings:/opt/embeddings
+    image: ${PROJECT_PREFIX}-rag
+    environment:
+      - OPENAI_API_TOKEN=${OPENAI_API_TOKEN}
+      - ENTITY_EMBEDDINGS_PATH=${ENTITY_EMBEDDINGS_PATH}
+      - KB_PICKLE_FILE_PATH=${KB_PICKLE_FILE_PATH}
+    ports:
+      - "8501:8501"

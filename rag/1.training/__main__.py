@@ -76,19 +76,13 @@ def train():
         optimizer=optimizer,
         negative_sampler=negative_sampler,
     )
-    
-    # Training parameters
-    checkpoint_directory = './training'
-    checkpoint_frequency = 10
-    
+
     # Train the model
     training_loop.train(
         triples_factory=train_tf,
         num_epochs=num_epochs,
         checkpoint_name=os.getenv('CHECKPOINT_NAME'),
-        checkpoint_directory=checkpoint_directory,
         batch_size=batch_size,
-        checkpoint_frequency=checkpoint_frequency,
     )
     
     # Save the trained model

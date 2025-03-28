@@ -12,11 +12,11 @@ services:
   training:
     build:
       context: ./1.training
+    depends_on:
+      - knowledge_base 
     volumes:
       - ./files/training:/opt/training
       - ./files/knowledge_base:/opt/knowledge_base
-    ports:
-      - "6006:6006"
     image: ${PROJECT_PREFIX}-training
     environment:
       - EMBEDDING_DIM=${EMBEDDING_DIM}
@@ -28,5 +28,3 @@ services:
       - BATCH_SIZE=${BATCH_SIZE}
       - KB_PICKLE_FILE_PATH=${KB_PICKLE_FILE_PATH}
       - MODEL_PATH=${MODEL_PATH}
-      - TENSORBOARD_PATH=${TENSORBOARD_PATH}
-      - CHECKPOINT_NAME=${CHECKPOINT_NAME}

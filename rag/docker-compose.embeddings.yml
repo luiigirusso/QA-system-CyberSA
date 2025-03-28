@@ -1,0 +1,17 @@
+services:
+  embeddings:
+    build:
+      context: ./2.embeddings
+    volumes:
+      - ./files/training:/opt/training
+      - ./files/knowledge_base:/opt/knowledge_base
+      - ./files/embeddings:/opt/embeddings
+    image: ${PROJECT_PREFIX}-embeddings
+    environment:
+      - MODEL_PATH=${MODEL_PATH}
+      - KB_PICKLE_FILE_PATH=${KB_PICKLE_FILE_PATH}
+      - OPENAI_API_TOKEN=${OPENAI_API_TOKEN}
+      - ENTITY_EMBEDDINGS_PATH=${ENTITY_EMBEDDINGS_PATH}
+      - RELATION_EMBEDDINGS_PATH=${RELATION_EMBEDDINGS_PATH}
+
+
