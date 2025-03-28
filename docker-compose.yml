@@ -1,0 +1,51 @@
+services:
+  knowledge_base:
+    build:
+      context: ./0.knowledge_base
+    volumes:
+      - ./files/knowledge_base:/opt/knowledge_base
+    image: ${PROJECT_PREFIX}-knowledge_base
+    environment:
+      - KB_TURTLE_FILE_PATH=${KB_TURTLE_FILE_PATH}
+      - KB_PICKLE_FILE_PATH=${KB_PICKLE_FILE_PATH}
+
+  query_translator:
+    build:
+      context: ./1.query_translator
+    ports:
+      - "8001:8000"
+    image: ${PROJECT_PREFIX}-query_translator
+    environment:
+      - OPENAI_API_TOKEN=${OPENAI_API_TOKEN}
+
+  response_generator:
+    build:
+      context: ./2.response_generator
+    ports:
+      - "8002:8000"
+    image: ${PROJECT_PREFIX}-response_generator
+    environment:
+      - OPENAI_API_TOKEN=${OPENAI_API_TOKEN}
+    depends_on:
+      - query_translator
+
+  streamlit_ui:
+    build:
+      context: ./3.streamlit_ui
+    volumes:
+      - ./files/knowledge_base:/app/knowledge_base
+    ports:
+      - "8501:8501"
+    image: ${PROJECT_PREFIX}-streamlit_ui
+    environment:
+      - NEO4J_URI=${NEO4J_URI}
+      - NEO4J_USERNAME=${NEO4J_USERNAME}
+      - NEO4J_PASSWORD=${NEO4J_PASSWORD}
+      - KB_PICKLE_FILE_PATH=${KB_PICKLE_FILE_PATH}
+      - OPENAI_API_TOKEN=${OPENAI_API_TOKEN}
+    depends_on:
+      - query_translator
+      - response_generator
+
+
+

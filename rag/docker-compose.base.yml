@@ -1,7 +1,7 @@
 services:
   knowledge_base:
     build:
-      context: ./0.knowledge_base
+      context: ../0.knowledge_base
     volumes:
       - ./files/knowledge_base:/opt/knowledge_base
     image: ${PROJECT_PREFIX}-knowledge_base
