@@ -4,15 +4,14 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from langchain_openai import ChatOpenAI
 
-
 app = FastAPI()
 
-# Modello dati per la richiesta
+# Data model for request payload
 class QueryRequest(BaseModel):
     question: str
 
-# Funzione per estrarre il nome dagli URI
-def extract_name(url):
+# Function to extract the name from URIs by removing known prefixes
+def extract_name(url: str) -> str:
     prefixes = [
         "http://d3fend.mitre.org/ontologies/d3fend.owl#",
         "http://www.w3.org/2000/01/rdf-schema#",
@@ -24,26 +23,23 @@ def extract_name(url):
         "http://example.org/network#",
         "http://example.org/stix#"
     ]
-    for prefix in prefixes:
-        if url.startswith(prefix):
-            return re.split(r'[#/]', url)[-1]
-    return url
+    # Use next() for efficiency; return the last segment after a known prefix if matched
+    return next((re.split(r'[#/]', url)[-1] for prefix in prefixes if url.startswith(prefix)), url)
 
-# Connessione all'LLM di OpenAI
+# Initialize connection to OpenAI's language model
 llm = ChatOpenAI(
-    temperature=0,
+    temperature=0,  # Set temperature to 0 for deterministic responses
     api_key=os.getenv("OPENAI_API_TOKEN"),
-    model_name="gpt-4o-mini"
+    model="gpt-4o-mini"
 )
 
 @app.post("/translate")
 async def translate_query(request: QueryRequest):
     question = request.question
 
-    # Prompt per la traduzione in Cypher
+    # Constructing the prompt for translating NL queries to Cypher
     prompt = [
-        ("system",
-        """
+        {"role": "system", "content": """
         You are an AI that translates natural language queries into Cypher queries.  
         Your task is to output only the Cypher query with no additional text.  
         The Cypher query must return triples in subject-predicate-object format or the URIs of the entities involved. When representing subject, predicate and object, represent them with s, p, o, respectively.
@@ -111,13 +107,13 @@ async def translate_query(request: QueryRequest):
         RETURN s.uri AS uri
 
         Ensure that the output strictly follows the Cypher query format and does not include any explanatory text.
-        """),
-        ("human", f"Question:\n{question}"),
+        """},
+        {"role": "user", "content": f"Question:\n{question}"}
     ]
 
-    # Genera la query Cypher
+    # Invoke OpenAI model to generate the Cypher query
     response = llm.invoke(prompt)
     cypher_query = response.content.strip()
 
-    # Ritorna la query Cypher
+    # Return the Cypher query as JSON response
     return {"cypher_query": cypher_query}
