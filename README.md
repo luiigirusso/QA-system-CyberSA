@@ -1,4 +1,22 @@
 # QA-system-CyberSA
+## Prerequisites
+
+Before running the system, make sure you have the necessary setup:
+
+1. **Install Neo4j Desktop**  
+   Download and install [Neo4j Desktop](https://neo4j.com/download/) on your system.
+
+2. **Load the RDF File into Neo4j**  
+   Open the Neo4j Browser and execute the following commands to load the RDF data:
+
+   ```cypher
+   MATCH (n) DETACH DELETE n;
+
+   CALL n10s.graphconfig.init();
+   CREATE CONSTRAINT n10s_unique_uri FOR (r:Resource) REQUIRE r.uri IS UNIQUE;
+   CALL n10s.rdf.import.fetch('filepath/to/turtle_file.ttl', 'Turtle');
+
+Replace `filepath/to/turtle_file.ttl` with the actual path to your RDF file.
 
 ## 🚀 Getting Started
 
