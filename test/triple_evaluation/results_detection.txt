@@ -1,0 +1,27 @@
+NetworkTrafficFlow -[detects]-> ApplicationorSystemExploitation
+[Head Prediction] - NetworkTrafficFlow
+  Rank: 4
+  Hits@1: 0, Hits@3: 0, Hits@10: 1
+  MRR: 0.250000
+
+NetworkTrafficContent -[detects]-> ApplicationorSystemExploitation
+[Head Prediction] - NetworkTrafficContent
+  Rank: 3
+  Hits@1: 0, Hits@3: 1, Hits@10: 1
+  MRR: 0.333333
+
+ApplicationLogContent -[detects]-> ApplicationorSystemExploitation
+[Head Prediction] - ApplicationLogContent
+  Rank: 2
+  Hits@1: 0, Hits@3: 1, Hits@10: 1
+  MRR: 0.500000
+
+HostStatus -[detects]-> ApplicationorSystemExploitation
+[Head Prediction] - HostStatus
+  Rank: 1
+  Hits@1: 1, Hits@3: 1, Hits@10: 1
+  MRR: 1.000000
+
+Total metrics:
+  Hits@1: 0.2500, Hits@3: 0.7500, Hits@10: 1.0000
+  MRR: 0.520833

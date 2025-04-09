@@ -57,7 +57,7 @@ async def translate_query(request: QueryRequest):
         - `PersonalComputer`: Includes `ns0__LaptopComputer`, `ns0__DesktopComputer`, `ns0__MobilePhone`
         - `ns2__AttackPattern`: Represents different types of cyber attacks.
         - `ns2__CourseOfAction`: Represents mitigation strategies.
-        - `DataComponent`: Represents detection mechanisms.
+        - `ns2__DataComponent`: Represents detection mechanisms.
         - `ns2__Malware`: Represents different types of malicious software.
         - `ns2__IntrusionSet`: Represents adversarial groups.
 
@@ -65,13 +65,13 @@ async def translate_query(request: QueryRequest):
         - `ns1__contains`: `(ns0__Network) -[:ns1__contains]-> (Server | ComputerNetworkNode | PersonalComputer)`
         - `ns1__wired_connection`: `(ns1__SMTPServer | ns1__POP3Server | ns0__DNSServer | ns0__VPNServer) -[:ns1__wired_connection]-> (ns0__Router)`
         - `ns1__wireless_connection`: `(ns0__LaptopComputer | ns0__DesktopComputer | ns0__MobilePhone) -[:ns1__wireless_connection]-> (ns0__WirelessAccessPoint)`
-        - `provides_vpn_access`: `(ns0__VPNServer) -[:provides_vpn_access]-> (DigitalArtifact)`
-        - `delivers_mail`: `(SMTPServer) -[:delivers_mail]-> (MailServerReceiver)`
-        - `resolves_mail`: `(DNSServer) -[:resolves_mail]-> (MailServer)`
-        - `validates_mail_domains`: `(DNSServer) -[:validates_mail_domains]-> (MailServer)`
+        - `ns1__provides_vpn_access`: `(ns0__VPNServer) -[:ns1__provides_vpn_access]-> (DigitalArtifact)`
+        - `ns1__delivers_mail`: `(SMTPServer) -[:ns1__delivers_mail]-> (MailServerReceiver)`
+        - `ns1__resolves_mail`: `(DNSServer) -[:ns1__resolves_mail]-> (MailServer)`
+        - `ns1__validates_mail_domains`: `(DNSServer) -[:ns1__validates_mail_domains]-> (MailServer)`
         - `ns1__filter_traffic`: `(Firewall) -[:ns1__filter_traffic]-> (Server | Router)`
-        - `mitigates`: `(ns2__CourseOfAction) -[:mitigates]-> (ns2__AttackPattern)`
-        - `ns2__detects`: `(DataComponent) -[:ns2__detects]-> (ns2__AttackPattern)`
+        - `ns2__mitigates`: `(ns2__CourseOfAction) -[:ns2__mitigates]-> (ns2__AttackPattern)`
+        - `ns2__detects`: `(ns2__DataComponent) -[:ns2__detects]-> (ns2__AttackPattern)`
         - `ns2__uses`: `(ns2__Malware | ns2__IntrusionSet) -[:ns2__uses]-> (ns2__AttackPattern)`
 
         ### Examples:
@@ -94,10 +94,10 @@ async def translate_query(request: QueryRequest):
         **Natural language:** "I detected many incoming UDP packets to my network that have 'ANY' as an argument. What might this be due to?"
         **Cypher Query:**
         MATCH (dc:ns2__DataComponent)
-        RETURN DISTINCT dc.uri AS uri
+        RETURN dc.uri AS uri
         UNION
         MATCH (ap:ns2__AttackPattern)
-        RETURN DISTINCT ap.uri AS uri
+        RETURN ap.uri AS uri
         
         #### Example 4
         **Natural language:** "How can I mitigate a Reflection Amplification attack?"

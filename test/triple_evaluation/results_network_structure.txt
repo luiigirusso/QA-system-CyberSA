@@ -1,0 +1,43 @@
+LAN1 -[contains]-> POP3Server1
+[Tail Prediction] - POP3Server1
+  Rank: 3
+  Hits@1: 0, Hits@3: 1, Hits@10: 1
+  MRR: 0.333333
+[Head Prediction] - LAN1
+  Rank: 1
+  Hits@1: 1, Hits@3: 1, Hits@10: 1
+  MRR: 1.000000
+
+Laptop1 -[wireless_connection]-> WirelessAP
+[Head Prediction] - Laptop1
+  Rank: 3
+  Hits@1: 0, Hits@3: 1, Hits@10: 1
+  MRR: 0.333333
+
+Laptop2 -[wireless_connection]-> WirelessAP
+[Head Prediction] - Laptop2
+  Rank: 2
+  Hits@1: 0, Hits@3: 1, Hits@10: 1
+  MRR: 0.500000
+
+Desktop1 -[wireless_connection]-> WirelessAP
+[Head Prediction] - Desktop1
+  Rank: 4
+  Hits@1: 0, Hits@3: 0, Hits@10: 1
+  MRR: 0.250000
+
+Mobile -[wireless_connection]-> WirelessAP
+[Head Prediction] - Mobile
+  Rank: 1
+  Hits@1: 1, Hits@3: 1, Hits@10: 1
+  MRR: 1.000000
+
+Remote -[contains]-> VPNServer
+[Head Prediction] - Remote
+  Rank: 1
+  Hits@1: 1, Hits@3: 1, Hits@10: 1
+  MRR: 1.000000
+
+Total metrics:
+  Hits@1: 0.4286, Hits@3: 0.8571, Hits@10: 1.0000
+  MRR: 0.630952

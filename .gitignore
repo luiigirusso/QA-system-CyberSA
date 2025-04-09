@@ -5,3 +5,6 @@ rag/files/embeddings/entity_embeddings.pkl
 rag/files/embeddings/relation_embeddings.pkl
 files/knowledge_base/lan_v1.5.pkl
 .env
+test/testing/
+test/.env
+test/*.txt

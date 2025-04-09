@@ -1,0 +1,21 @@
+FilterNetworkTraffic -[mitigates]-> OSExhaustionFlood
+[Head Prediction] - FilterNetworkTraffic
+  Rank: 1
+  Hits@1: 1, Hits@3: 1, Hits@10: 1
+  MRR: 1.000000
+
+FilterNetworkTraffic -[mitigates]-> ApplicationorSystemExploitation
+[Head Prediction] - FilterNetworkTraffic
+  Rank: 1
+  Hits@1: 1, Hits@3: 1, Hits@10: 1
+  MRR: 1.000000
+
+FilterNetworkTraffic -[mitigates]-> DirectNetworkFlood
+[Head Prediction] - FilterNetworkTraffic
+  Rank: 1
+  Hits@1: 1, Hits@3: 1, Hits@10: 1
+  MRR: 1.000000
+
+Total metrics:
+  Hits@1: 1.0000, Hits@3: 1.0000, Hits@10: 1.0000
+  MRR: 1.000000
