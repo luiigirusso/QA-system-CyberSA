@@ -4,14 +4,26 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from langchain_openai import ChatOpenAI
 
+# Initialize FastAPI app
 app = FastAPI()
 
-# Data model for request payload
+# Pydantic model for request body
 class QueryRequest(BaseModel):
+    """
+    Request model representing a user's natural language question.
+    """
     question: str
 
-# Function to extract the name from URIs by removing known prefixes
 def extract_name(url: str) -> str:
+    """
+    Extracts the final segment of a URI by removing known namespace prefixes.
+
+    Args:
+        url (str): A full URI string.
+
+    Returns:
+        str: The simplified name extracted from the URI.
+    """
     prefixes = [
         "http://d3fend.mitre.org/ontologies/d3fend.owl#",
         "http://www.w3.org/2000/01/rdf-schema#",
@@ -23,21 +35,30 @@ def extract_name(url: str) -> str:
         "http://example.org/network#",
         "http://example.org/stix#"
     ]
-    # Use next() for efficiency; return the last segment after a known prefix if matched
+    # Return the last segment after removing matching prefixes
     return next((re.split(r'[#/]', url)[-1] for prefix in prefixes if url.startswith(prefix)), url)
 
-# Initialize connection to OpenAI's language model
+# Initialize the OpenAI LLM for Cypher translation
 llm = ChatOpenAI(
-    temperature=0,  # Set temperature to 0 for deterministic responses
+    temperature=0,  # Low temperature for deterministic results
     api_key=os.getenv("OPENAI_API_TOKEN"),
-    model="gpt-4o-mini"
+    model="gpt-4o-mini" # Lightweight GPT-4 variant
 )
 
 @app.post("/translate")
 async def translate_query(request: QueryRequest):
+    """
+    Endpoint that receives a natural language question and returns a Cypher query.
+
+    Args:
+        request (QueryRequest): JSON payload containing the question.
+
+    Returns:
+        dict: A dictionary with the translated Cypher query.
+    """
     question = request.question
 
-    # Constructing the prompt for translating NL queries to Cypher
+    # Prompt template with system instructions and schema/examples
     prompt = [
         {"role": "system", "content": """
         You are an AI that translates natural language queries into Cypher queries.  
@@ -111,9 +132,8 @@ async def translate_query(request: QueryRequest):
         {"role": "user", "content": f"Question:\n{question}"}
     ]
 
-    # Invoke OpenAI model to generate the Cypher query
+    # Invoke the language model with the crafted prompt
     response = llm.invoke(prompt)
     cypher_query = response.content.strip()
 
-    # Return the Cypher query as JSON response
     return {"cypher_query": cypher_query}

@@ -3,29 +3,41 @@ from pydantic import BaseModel
 import os
 from langchain_openai import ChatOpenAI
 
+# Initialize the FastAPI app
 app = FastAPI()
 
-# Data model for request payload
+# Define the request payload model
 class ResponseRequest(BaseModel):
+    """
+    Request model containing the user's question and the associated context.
+    """
     question: str
     context: str
 
-# Initialize OpenAI language model with API key from environment variables
+# Initialize the OpenAI language model
 llm = ChatOpenAI(
-    temperature=0,  # Set to 0 for deterministic responses
-    api_key=os.getenv("OPENAI_API_TOKEN"),
-    model="gpt-4o-mini"
+    temperature=0,  # Deterministic output for reproducible results
+    api_key=os.getenv("OPENAI_API_TOKEN"), # Load API key from environment
+    model="gpt-4o-mini" # Use a lightweight GPT-4 variant
 )
 
 @app.post("/generate")
 async def generate_response(request: ResponseRequest):
     """
-    Generates a response based on the given question and context using OpenAI's language model.
-    The AI assistant is designed to support cybersecurity analysts in detecting and mitigating
-    DDoS and DoS attacks.
+    Endpoint that generates a context-aware answer to a cybersecurity-related question.
+
+    This endpoint is designed to assist cybersecurity analysts in monitoring, 
+    detecting, and mitigating DDoS and DoS attacks by providing relevant insights 
+    based solely on a given context.
+
+    Args:
+        request (ResponseRequest): JSON payload containing both the question and the context.
+
+    Returns:
+        dict: A dictionary with a single key "answer" containing the model's response.
     """
     
-    # Construct the prompt for the AI assistant
+    # Define the prompt used to guide the language model's behavior
     prompt = [
         {"role": "system", "content": """
         You are an AI assistant designed to support a security analyst in monitoring, detecting, and mitigating DDoS and DoS attacks.  
@@ -39,8 +51,8 @@ async def generate_response(request: ResponseRequest):
         {"role": "user", "content": f"Context: {request.context}\n\nQuestion: {request.question}"}
     ]
 
-    # Invoke OpenAI model to generate response
+    # Invoke the language model with the crafted prompt
     response = llm.invoke(prompt)
 
-    # Return the generated answer as JSON response
+    # Return the cleaned answer
     return {"answer": response.content.strip()}

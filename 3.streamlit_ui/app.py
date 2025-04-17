@@ -7,12 +7,31 @@ from langchain_neo4j import Neo4jGraph
 from langchain_openai import ChatOpenAI
 
 def format_results(results):
+    """
+    Formats a list of retrieved entity URIs into a readable string.
+    
+    Args:
+        results (list): A list of entity URIs.
+    
+    Returns:
+        str: A string with each entity formatted as a bullet point.
+    """
     formatted = "Search Entities:\n"
     formatted += "\n".join(f"- {entity}" for entity in results)
     return formatted
 
-# Function to format retrieved triples
+
 def format_triples(triples, flag):
+    """
+    Formats a list of triples into a readable string.
+
+    Args:
+        triples (list): A list of triples or groups of triples.
+        flag (int): If 0, triples are shown flat. If 1, grouped by entity.
+    
+    Returns:
+        str: A formatted string representation of the triples.
+    """
     formatted = "\nTriples:\n"
     if flag == 0:
         formatted += "\n".join(f"- {triple_group}" for triple_group in triples)
@@ -21,8 +40,16 @@ def format_triples(triples, flag):
             formatted += "\n".join(f"  - {triple[0]} {triple[1]} {triple[2]}" for triple in triple_group)
     return formatted
 
-# Function to extract entity names from URIs
 def extract_name(url):
+    """
+    Extracts the last part of a URI to get a readable entity name.
+
+    Args:
+        url (str): A full URI string.
+    
+    Returns:
+        str: The extracted entity name or the original URL if no match.
+    """
     prefixes = [
         "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
         "http://www.w3.org/2000/01/rdf-schema#",
@@ -37,8 +64,16 @@ def extract_name(url):
             return re.split(r'[#/]', url)[-1]
     return url
 
-# Function to execute a Cypher query on the Neo4j graph database
 def search(cypher_query):
+    """
+    Executes a Cypher query on the Neo4j graph and returns URIs and triples.
+
+    Args:
+        cypher_query (str): The Cypher query to execute.
+    
+    Returns:
+        tuple: (uris, triples, original_query)
+    """
     kg = Neo4jGraph(
         url=os.getenv("NEO4J_URI"),
         username=os.getenv("NEO4J_USERNAME"),
@@ -57,15 +92,22 @@ def search(cypher_query):
 
     return uris, triples, cypher_query
 
-# Function to retrieve context based on query response
 def get_context(response):
+    """
+    Retrieves contextual triples from the graph or a fallback pickle file.
+
+    Args:
+        response (str): Cypher query or raw response text.
+    
+    Returns:
+        tuple: (uris, context_triples, cypher_query)
+    """
     context = []
     results, triples, cypher_query = search(response)
 
     if triples:
         context.extend(triples)
     else:
-        # Load precomputed triples from a pickle file
         with open(os.getenv("KB_PICKLE_FILE_PATH"), "rb") as f:
             train_triples, valid_triples, test_triples = pickle.load(f)
 
@@ -85,8 +127,16 @@ def get_context(response):
 
     return results, context, cypher_query
 
-# Function to generate an answer using an LLM
 def generate_LLM_answer(question: str):
+    """
+    Calls the LLM directly for a general answer (outside main pipeline).
+
+    Args:
+        question (str): The user's natural language question.
+    
+    Returns:
+        str: The LLM-generated response.
+    """
     llm = ChatOpenAI(
         temperature=0,
         api_key=os.getenv("OPENAI_API_TOKEN"),
@@ -95,48 +145,50 @@ def generate_LLM_answer(question: str):
     response = llm.invoke(question)
     return response.content
 
-# Streamlit UI
+# --- Streamlit UI ---
+
 st.title("🔒 Security Analyst AI Assistant")
 st.write("I am here to help you!")
 
-# Initialize message history if not present
+# Initialize chat message history
 if "messages" not in st.session_state:
     st.session_state["messages"] = []
 
-# Display previous messages
+# Render chat history
 for msg in st.session_state["messages"]:
     with st.chat_message(msg["role"]):
         st.markdown(msg["content"])
 
-# Handle user input
+# Handle new user input
 if user_input := st.chat_input("Enter your question..."):
     st.session_state["messages"].append({"role": "user", "content": user_input})
     
     with st.chat_message("user"):
         st.markdown(user_input)
 
-    # Call query translation service
+    # Query translation service (NL → Cypher)
     response = requests.post("http://query_translator:8000/translate", json={"question": user_input})
     cypher_query = response.json().get("cypher_query")
 
     # Retrieve context and triples
     results, context, cypher_query = get_context(cypher_query)
 
-    # Format results for display
+    # Format results
     formatted_context = format_results(results) if results else ""
     formatted_triples = format_triples(context, flag=1 if results else 0)
 
-    # Call response generation service
+    # Response generation service
     response = requests.post("http://response_generator:8000/generate", json={"question": user_input, "context": formatted_triples})
     answer = response.json().get("answer", "")
 
     # Generate LLM-based response
     llm_answer = generate_LLM_answer(user_input)
 
-    # Display the AI assistant's response
+    # Display AI assistant's main response
     with st.chat_message("assistant"):
         st.markdown(answer)
     
+    # Save assistant response to chat history
     st.session_state["messages"].append({"role": "assistant", "content": answer})
 
     # Expandable sections for additional details
