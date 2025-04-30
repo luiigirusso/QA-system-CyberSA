@@ -57,19 +57,17 @@ These steps are required only the first time you run the system, or if you chang
 # Launch the training component
 docker compose -f docker-compose.base.yml up --build
 
-# çaunch the embeddings component
+# Launch the embeddings component
 docker compose -f docker-compose.embeddings.yml up --build
-
-# Launch the RAG component (retrieval + app)
-docker compose -f docker-compose.rag.yml up --build
 ```
 
-3. **(Subsequent runs)** If the dataset has not changed and the embeddings are already indexed, you can simply start the RAG component:
+4. **(Subsequent runs)** If the dataset has not changed and the embeddings are already indexed, you can simply start the RAG component:
 ```bash
+# Launch the RAG component
 docker compose -f docker-compose.rag.yml up --build
 ```
 
-4. **Access the Streamlit app**
+5. **Access the Streamlit app**
 Open your browser and go to:
 ```arduino
 http:localhost:8502
