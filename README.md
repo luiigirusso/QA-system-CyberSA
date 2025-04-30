@@ -19,7 +19,6 @@ Before running the system, make sure you have the necessary setup:
 Replace `filepath/to/turtle_file.ttl` with the actual path to your RDF file.
 
 ## 🚀 Getting Started
-
 1. **Clone the repository**
 ```bash
 git clone https://github.com/luiigirusso/QA-system-CyberSA.git
@@ -30,8 +29,48 @@ cd QA-system-CyberSA
 ```bash
 docker compose up --build
 ```
-3. **Go to the Streamlit app**
-
+3. **Access the Streamlit app**
+Open your browser and go to:
 ```arduino
 http:localhost:8501
 ```
+
+# RAG-system-CyberSA
+## Prerequisites
+
+Before running the system, ensure that the Turtle file you intend to use is located in the `/rag/files/knowledge_base` directory.
+
+## 🚀 Getting Started
+1. **Clone the repository**
+```bash
+git clone https://github.com/luiigirusso/QA-system-CyberSA.git
+cd QA-system-CyberSA
+```
+2. **Move to the RAG directory**
+```bash
+cd rag
+```
+3. **(First run or dataset change only)** Build and launch the components needed to initialize the system:
++ These steps are required only the first time you run the system, or if you change the dataset and need to retrain the embeddings.
+```bash
+# Launch the training component
+docker compose -f docker-compose.base.yml up --build
+
+# çaunch the embeddings component
+docker compose -f docker-compose.embeddings.yml up --build
+
+# Launch the RAG component (retrieval + app)
+docker compose -f docker-compose.rag.yml up --build
+```
+
+3. **(Subsequent runs)** If the dataset has not changed and the embeddings are already indexed, you can simply start the RAG component:
+```bash
+docker compose -f docker-compose.rag.yml up --build
+```
+
+4. **Access the Streamlit app**
+Open your browser and go to:
+```arduino
+http:localhost:8502
+```
+
