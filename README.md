@@ -51,6 +51,7 @@ cd QA-system-CyberSA
 cd rag
 ```
 3. **(First run or dataset change only)** Build and launch the components needed to initialize the system:
+
 These steps are required only the first time you run the system, or if you change the dataset and need to retrain the embeddings.
 ```bash
 # Launch the training component
