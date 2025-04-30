@@ -23,20 +23,19 @@ Replace `filepath/to/turtle_file.ttl` with the actual path to your RDF file.
 
 ## 🚀 Getting Started
 1. **Clone the repository**
-```bash
-git clone https://github.com/luiigirusso/QA-system-CyberSA.git
-cd QA-system-CyberSA
-```
-
+   ```bash
+   git clone https://github.com/luiigirusso/QA-system-CyberSA.git
+   cd QA-system-CyberSA
+   ```
 2. **Build and launch the pipeline**
-```bash
-docker compose up --build
-```
+   ```bash
+   docker compose up --build
+   ```
 3. **Access the Streamlit app**
-Open your browser and go to:
-```arduino
-http:localhost:8501
-```
+   Open your browser and go to:
+   ```arduino
+   http:localhost:8501
+   ```
 
 # RAG-system-CyberSA
 ## Prerequisites
@@ -46,34 +45,34 @@ http:localhost:8501
 
 ## 🚀 Getting Started
 1. **Clone the repository**
-```bash
-git clone https://github.com/luiigirusso/QA-system-CyberSA.git
-cd QA-system-CyberSA
-```
+   ```bash
+   git clone https://github.com/luiigirusso/QA-system-CyberSA.git
+   cd QA-system-CyberSA
+   ```
 2. **Move to the RAG directory**
-```bash
-cd rag
-```
+   ```bash
+   cd rag
+   ```
 3. **(First run or dataset change only)** Build and launch the components needed to initialize the system:
 
    - These steps are required only the first time you run the system, or if you change the dataset and need to retrain the embeddings.
-```bash
-# Launch the training component
-docker compose -f docker-compose.base.yml up --build
+   ```bash
+   # Launch the training component
+   docker compose -f docker-compose.base.yml up --build
 
-# Launch the embeddings component
-docker compose -f docker-compose.embeddings.yml up --build
-```
+   # Launch the embeddings component
+   docker compose -f docker-compose.embeddings.yml up --build
+   ```
 
 4. **(Subsequent runs)** If the dataset has not changed and the embeddings are already indexed, you can simply start the RAG component:
-```bash
-# Launch the RAG component
-docker compose -f docker-compose.rag.yml up --build
-```
+   ```bash
+   # Launch the RAG component
+   docker compose -f docker-compose.rag.yml up --build
+   ```
 
 5. **Access the Streamlit app**
-Open your browser and go to:
-```arduino
-http:localhost:8502
-```
+   Open your browser and go to:
+   ```arduino
+   http:localhost:8502
+   ```
 
