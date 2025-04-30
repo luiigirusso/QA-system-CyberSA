@@ -3,10 +3,13 @@
 
 Before running the system, make sure you have the necessary setup:
 
-1. **Install Neo4j Desktop**  
+1. **Install Docker**
+   Ensure that [Docker](https://docs.docker.com/get-started/get-docker/) is installed and running on your system.
+
+2. **Install Neo4j Desktop**  
    Download and install [Neo4j Desktop](https://neo4j.com/download/) on your system.
 
-2. **Load the RDF File into Neo4j**  
+3. **Load the RDF File into Neo4j**  
    Open the Neo4j Browser and execute the following commands to load the RDF data:
 
    ```cypher
@@ -38,7 +41,8 @@ http:localhost:8501
 # RAG-system-CyberSA
 ## Prerequisites
 
-Before running the system, ensure that the Turtle file you intend to use is located in the `/rag/files/knowledge_base` directory.
++ Docker is installed and running on your machine.
++ The Turtle file (.ttl) you intend to use is placed in the `/rag/files/knowledge_base` directory.
 
 ## 🚀 Getting Started
 1. **Clone the repository**
@@ -52,7 +56,7 @@ cd rag
 ```
 3. **(First run or dataset change only)** Build and launch the components needed to initialize the system:
 
-- These steps are required only the first time you run the system, or if you change the dataset and need to retrain the embeddings.
+   - These steps are required only the first time you run the system, or if you change the dataset and need to retrain the embeddings.
 ```bash
 # Launch the training component
 docker compose -f docker-compose.base.yml up --build
