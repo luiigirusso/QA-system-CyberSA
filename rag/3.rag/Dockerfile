@@ -18,4 +18,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY __main__.py /opt/
 WORKDIR /opt/
 
-CMD ["streamlit", "run", "/opt/__main__.py", "--server.port=8501", "--server.address=0.0.0.0"]
+CMD ["streamlit", "run", "/opt/__main__.py", "--server.port=8502", "--server.address=0.0.0.0"]

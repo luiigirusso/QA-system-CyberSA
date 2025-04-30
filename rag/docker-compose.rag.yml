@@ -11,4 +11,4 @@ services:
       - ENTITY_EMBEDDINGS_PATH=${ENTITY_EMBEDDINGS_PATH}
       - KB_PICKLE_FILE_PATH=${KB_PICKLE_FILE_PATH}
     ports:
-      - "8501:8501"
+      - "8502:8502"

@@ -91,8 +91,8 @@ def format_triples(triples):
     )
 
 def rag():
-    st.title("🔐 Security Analyst AI Assistant")
-    st.write("Ask your cybersecurity-related questions.")
+    st.title("🔐 Security GraphRAG System based on TransE KGE")
+    st.write("I am here to help you!")
     if "messages" not in st.session_state:
         st.session_state["messages"] = []
     for msg in st.session_state["messages"]:
