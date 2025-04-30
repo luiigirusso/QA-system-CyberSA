@@ -34,7 +34,7 @@ Replace `filepath/to/turtle_file.ttl` with the actual path to your RDF file.
 3. **Access the Streamlit app**
    Open your browser and go to:
    ```arduino
-   http:localhost:8501
+   http://localhost:8501
    ```
 
 # RAG-system-CyberSA
@@ -73,6 +73,6 @@ Replace `filepath/to/turtle_file.ttl` with the actual path to your RDF file.
 5. **Access the Streamlit app**
    Open your browser and go to:
    ```arduino
-   http:localhost:8502
+   http://localhost:8502
    ```
 
