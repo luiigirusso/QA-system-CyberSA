@@ -1,8 +1,4 @@
 rag/.env
-rag/files/knowledge_base/lan_v1.5.pkl
-rag/files/training/TransE.pkl
-rag/files/embeddings/entity_embeddings.pkl
-rag/files/embeddings/relation_embeddings.pkl
 files/knowledge_base/lan_v1.5.pkl
 .env
 test/testing/
